@@ -176,7 +176,9 @@ int analogRead(pin_size_t pin)
 */
 
 
-
+//define static variables
+uint32_t FastAnalogPin::_instance_counter;
+uint32_t FastAnalogPin::_nb_locking_pin;
 
 FastAnalogPin::FastAnalogPin(uint32_t pin) : _pin(pin), _nb_state(0) {
   //validate pin
@@ -197,6 +199,7 @@ FastAnalogPin::FastAnalogPin(uint32_t pin) : _pin(pin), _nb_state(0) {
 
   //this is the first instance, initialize the ADC
   if(_instance_counter == 0) {
+      _nb_locking_pin = ANALOG_PIN_UNLOCKED; //initialize the lock
       while (ADC->STATUS.bit.SYNCBUSY == 1); //syncADC();
       ADC->CTRLA.bit.ENABLE = 0x01;             // Enable ADC
   }
@@ -232,6 +235,7 @@ int FastAnalogPin::read_nb() {
   if (_nb_locking_pin != ANALOG_PIN_UNLOCKED) {
     if (_nb_locking_pin != _pin) return ANALOG_BUSY; //someone else has this locked
   }
+  
   _nb_locking_pin = _pin;
 
   //overflows are intentional
