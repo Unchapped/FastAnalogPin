@@ -183,7 +183,7 @@ uint32_t FastAnalogPin::_nb_locking_pin;
 FastAnalogPin::FastAnalogPin(uint32_t pin) : _pin(pin), _nb_state(0) {
   //validate pin
   if (_pin < A0) _pin += A0; 
-  if (_pin > A7) _pin += A7; //TODO: it would probably be better to use an exception or factory method, this fails silently...
+  if (_pin > A7) _pin = A7; //TODO: it would probably be better to use an exception or factory method, this fails silently...
   
   //initialize pin
   pinMode(_pin, INPUT);
