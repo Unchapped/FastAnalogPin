@@ -3,9 +3,27 @@
 //Include libraries used to get around weirdnesses in the arduino build paths
 #include <stdint.h>
 #include <Arduino.h>
-#include "wiring_private.h"
-#include "AnalogSensor.h"
+//#include "wiring_private.h"
+#include "FastAnalogPin.h"
 
+
+class MicrosecondLoopTimer {
+  unsigned long _timer, _max_time, _min_time;
+  
+  public:
+    MicrosecondLoopTimer(): _timer(micros()), _max_time(0ul), _min_time(~0ul) {}
+
+    void start() {_timer = micros();}
+
+    void stop() {
+      _timer = micros() - _timer;
+      if (_timer > _max_time) _max_time = _timer;
+      if (_timer < _min_time) _min_time = _timer;
+    }
+
+    unsigned long max() {return _max_time;}
+    unsigned long min() {return _min_time;}
+};
 
 void setup() {
 #ifdef SAMD
