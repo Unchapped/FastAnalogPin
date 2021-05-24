@@ -4,6 +4,8 @@
 //This probably violates some assumptions, but shame on Arduino for doing everything in the global namespace...
 #include "wiring_private.h"
 
+#if defined(ARDUINO_ARCH_SAMD)
+
 //define static variables
 uint32_t FastAnalogPin::_instance_counter;
 uint32_t FastAnalogPin::_nb_locking_pin;
@@ -90,3 +92,5 @@ int FastAnalogPin::read_nb() {
   }
   return ANALOG_BUSY;  
 }
+
+#endif //if ARDUINO_ARCH_SAMD

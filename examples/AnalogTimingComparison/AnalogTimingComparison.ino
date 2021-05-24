@@ -1,11 +1,5 @@
-/* This file intentionally left blank, see Main.cpp */
-
-//Include libraries used to get around weirdnesses in the arduino build paths
-#include <stdint.h>
 #include <Arduino.h>
-//#include "wiring_private.h"
-#include "FastAnalogPin.h"
-
+#include <FastAnalogPin.h>
 
 class MicrosecondLoopTimer {
   unsigned long _timer, _max_time, _min_time;
@@ -20,6 +14,12 @@ class MicrosecondLoopTimer {
       if (_timer > _max_time) _max_time = _timer;
       if (_timer < _min_time) _min_time = _timer;
     }
+
+//curse this dumb polluted global namespace...
+#if defined(ARDUINO_ARCH_AVR)
+#undef max
+#undef min
+#endif
 
     unsigned long max() {return _max_time;}
     unsigned long min() {return _min_time;}
